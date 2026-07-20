@@ -24,28 +24,61 @@
             padding: 24px 20px;
             box-shadow: 0 8px 30px rgba(0,0,0,0.12);
             border: 3px solid #ff6b8a;
+            position: relative;
         }
         h1 { font-size: clamp(22px, 3.5vw, 30px); color: #e67e22; margin-bottom: 4px; }
-        .subtitle { font-size: 14px; color: #888; margin-bottom: 16px; }
+        .subtitle { font-size: 14px; color: #888; margin-bottom: 12px; }
 
-        /* Photo area with magic wand cursor */
+        /* Phone frame */
+        .phone-frame-container {
+            position: relative;
+            width: 85%;
+            max-width: 420px;
+            margin: 0 auto 10px;
+        }
+        .phone-frame {
+            width: 100%;
+            height: auto;
+            display: block;
+            pointer-events: none;
+        }
+        .phone-screen {
+            position: absolute;
+            top: 19.2%;
+            left: 30.1%;
+            width: 39.8%;
+            height: 61.7%;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+
+        /* Photo area inside phone */
         .photo-area {
-            width: 100%; aspect-ratio: 4/3; background: #f0f0f0;
-            border-radius: 16px; display: flex; align-items: center; justify-content: center;
-            overflow: hidden; border: 3px dashed #e8c4a0; margin-bottom: 12px;
+            width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
             position: relative;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">🪄</text></svg>') 16 28, auto;
         }
         .photo-area img { width: 100%; height: 100%; object-fit: cover; }
-        .photo-placeholder { font-size: 50px; color: #ccc; }
+        .photo-placeholder { font-size: 40px; color: #ccc; }
 
-        /* Stickers on photo */
+        /* Magic wand follower (mobile) */
+        .wand-follower {
+            position: absolute; font-size: 32px; pointer-events: none; z-index: 25;
+            transform: translate(-50%, -50%); display: none;
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+        }
+
+        /* Stickers */
         .sticker-on-photo {
-            position: absolute; font-size: 28px; pointer-events: none;
+            position: absolute; font-size: 28px; pointer-events: auto;
             transform: translate(-50%, -50%); z-index: 10;
             filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+            cursor: grab;
         }
-        /* Sparkle burst */
+        .sticker-on-photo:active { cursor: grabbing; }
+
+        /* Sparkles */
         .sparkle-burst {
             position: absolute; pointer-events: none; z-index: 20;
             font-size: 20px; animation: sparkleUp 0.8s ease forwards;
@@ -55,23 +88,22 @@
             100% { transform: translate(-50%, -50%) translateY(-40px) scale(1.5); opacity: 0; }
         }
 
-        /* Sticker panel */
         .sticker-panel {
             display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px;
         }
         .sticker-btn {
-            font-size: 24px; cursor: pointer; background: #fff; border: 2px solid #e8c4a0;
-            border-radius: 50%; width: 40px; height: 40px; display: flex;
+            font-size: 22px; cursor: pointer; background: #fff; border: 2px solid #e8c4a0;
+            border-radius: 50%; width: 38px; height: 38px; display: flex;
             align-items: center; justify-content: center; transition: 0.15s;
         }
         .sticker-btn:hover { background: #fff5f5; border-color: #ff6b8a; }
         .sticker-btn.active { background: #ffe0e0; border-color: #ff6b8a; box-shadow: 0 0 10px rgba(255,107,138,0.4); }
 
-        .btn-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+        .btn-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
         .btn {
-            padding: 10px 20px; border-radius: 20px; border: none;
+            padding: 10px 18px; border-radius: 20px; border: none;
             font-weight: 700; cursor: pointer; font-family: inherit;
-            font-size: 14px; color: white; transition: 0.15s;
+            font-size: 13px; color: white; transition: 0.15s;
             box-shadow: 0 3px 8px rgba(0,0,0,0.12);
         }
         .btn:active { transform: scale(0.95); }
@@ -84,22 +116,23 @@
         .btn-share { background: #9b59b6; }
 
         textarea {
-            width: 100%; padding: 12px; border-radius: 14px;
-            border: 2px solid #e8c4a0; font-size: 15px; font-family: inherit;
-            resize: vertical; min-height: 60px; margin-bottom: 4px;
+            width: 100%; padding: 10px; border-radius: 14px;
+            border: 2px solid #e8c4a0; font-size: 14px; font-family: inherit;
+            resize: vertical; min-height: 50px; margin-bottom: 4px;
         }
         textarea:focus { border-color: #ff6b8a; outline: none; box-shadow: 0 0 0 3px rgba(255,107,138,0.15); }
         .example {
-            font-size: 12px; color: #888; margin-bottom: 8px;
-            background: #fff9e0; padding: 6px 10px; border-radius: 10px; display: inline-block;
+            font-size: 11px; color: #888; margin-bottom: 6px;
+            background: #fff9e0; padding: 4px 8px; border-radius: 8px; display: inline-block;
         }
-        .feedback { font-size: 16px; font-weight: 700; min-height: 24px; margin-top: 6px; }
+        .feedback { font-size: 15px; font-weight: 700; min-height: 22px; margin-top: 4px; }
         .feedback.correct { color: #27ae60; } .feedback.wrong { color: #e74c3c; }
-        .status { font-size: 11px; color: #999; margin-top: 2px; }
+        .status { font-size: 10px; color: #999; margin-top: 2px; }
         @media (max-width: 500px) {
-            .game-wrapper { padding: 16px 12px; }
-            .btn { font-size: 12px; padding: 8px 14px; }
-            .sticker-btn { width: 34px; height: 34px; font-size: 20px; }
+            .game-wrapper { padding: 14px 10px; }
+            .btn { font-size: 11px; padding: 8px 12px; }
+            .sticker-btn { width: 32px; height: 32px; font-size: 18px; }
+            .phone-frame-container { width: 95%; }
         }
     </style>
 </head>
@@ -107,11 +140,18 @@
 
 <div class="game-wrapper">
     <h1>📸 My Room</h1>
-    <p class="subtitle">Take a photo, use magic wand 🪄, add stickers, describe — type or talk!</p>
+    <p class="subtitle">Take a photo, use magic wand 🪄, add stickers, describe!</p>
 
-    <div class="photo-area" id="photoArea">
-        <span class="photo-placeholder" id="photoPlaceholder">📷</span>
-        <img id="photoImg" style="display:none;" alt="Your room">
+    <!-- Phone frame -->
+    <div class="phone-frame-container">
+        <img class="phone-frame" src="phone-frame.png" alt="Phone frame" id="phoneFrameImg" onerror="this.style.display='none'">
+        <div class="phone-screen" id="phoneScreen">
+            <div class="photo-area" id="photoArea">
+                <span class="photo-placeholder" id="photoPlaceholder">📷</span>
+                <img id="photoImg" style="display:none;" alt="Your room">
+                <span class="wand-follower" id="wandFollower">🪄</span>
+            </div>
+        </div>
     </div>
 
     <div class="sticker-panel">
@@ -126,13 +166,13 @@
     </div>
 
     <div class="btn-row">
-        <button class="btn btn-photo" onclick="document.getElementById('fileInput').click()">📷 Take / Choose Photo</button>
+        <button class="btn btn-photo" onclick="document.getElementById('fileInput').click()">📷 Take / Choose</button>
         <button class="btn btn-clear" onclick="clearAll()">🗑️ Clear</button>
     </div>
     <input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="loadPhoto(event)">
 
     <div class="example">💡 Example: <b>There is a bed next to the window. There are books on the desk.</b></div>
-    <textarea id="description" placeholder="Describe your room... (or use microphone 🎤)"></textarea>
+    <textarea id="description" placeholder="Describe your room... (or use 🎤)"></textarea>
 
     <div class="btn-row">
         <button class="btn btn-speak" onclick="speakText()">🔊 Listen</button>
@@ -152,10 +192,26 @@
     const feedback = document.getElementById('feedback');
     const status = document.getElementById('status');
     const btnRecord = document.getElementById('btnRecord');
+    const wandFollower = document.getElementById('wandFollower');
+    const phoneFrameImg = document.getElementById('phoneFrameImg');
+    const phoneScreen = document.getElementById('phoneScreen');
 
     let activeSticker = null;
     let recognition = null;
     let isRecording = false;
+
+    // If no phone frame image, remove the frame and expand the screen
+    window.addEventListener('load', function() {
+        if (!phoneFrameImg.complete || phoneFrameImg.naturalWidth === 0) {
+            phoneFrameImg.style.display = 'none';
+            phoneScreen.style.position = 'relative';
+            phoneScreen.style.top = '0';
+            phoneScreen.style.left = '0';
+            phoneScreen.style.width = '100%';
+            phoneScreen.style.height = 'auto';
+            phoneScreen.style.aspectRatio = '4/3';
+        }
+    });
 
     // ====== PHOTO ======
     function loadPhoto(event) {
@@ -166,6 +222,7 @@
             photoImg.src = e.target.result;
             photoImg.style.display = 'block';
             photoPlaceholder.style.display = 'none';
+            playSound('shutter');
         };
         reader.readAsDataURL(file);
     }
@@ -184,164 +241,173 @@
         });
     });
 
-    // ====== MAGIC WAND CLICK ======
+    // ====== CLICK ON PHOTO ======
     photoArea.addEventListener('click', function(e) {
-        if (e.target.classList.contains('sticker-on-photo') || e.target.classList.contains('sparkle-burst')) return;
+        if (e.target.classList.contains('sticker-on-photo')) return;
         
         const rect = photoArea.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // Always sparkles on click (magic wand effect!)
         spawnSparkles(x, y);
+        playSound('magic');
 
-        // If sticker active, place sticker
         if (activeSticker) {
             const sticker = document.createElement('span');
             sticker.className = 'sticker-on-photo';
             sticker.textContent = activeSticker;
             sticker.style.left = x + 'px';
             sticker.style.top = y + 'px';
+            makeStickerResizable(sticker);
             photoArea.appendChild(sticker);
+            playSound('pop');
         }
     });
 
+    // ====== RESIZE STICKERS ======
+    function makeStickerResizable(sticker) {
+        // Mouse wheel
+        sticker.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const current = parseInt(window.getComputedStyle(sticker).fontSize);
+            const delta = e.deltaY > 0 ? -2 : 2;
+            const newSize = Math.max(20, Math.min(80, current + delta));
+            sticker.style.fontSize = newSize + 'px';
+        });
+
+        // Touch double-tap to cycle sizes
+        let lastTap = 0;
+        sticker.addEventListener('touchstart', function(e) {
+            const now = Date.now();
+            if (now - lastTap < 300 && e.touches.length === 1) {
+                e.preventDefault();
+                const current = parseInt(window.getComputedStyle(sticker).fontSize);
+                const sizes = [20, 30, 40, 55, 70];
+                const idx = sizes.indexOf(current);
+                const next = sizes[(idx + 1) % sizes.length];
+                sticker.style.fontSize = next + 'px';
+            }
+            lastTap = now;
+        });
+
+        // Double-click to remove
+        sticker.addEventListener('dblclick', function() {
+            sticker.remove();
+        });
+    }
+
     function spawnSparkles(x, y) {
         const emojis = ['✨', '⭐', '💫', '🌟', '✨'];
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 5; i++) {
             const spark = document.createElement('span');
             spark.className = 'sparkle-burst';
             spark.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             spark.style.left = x + 'px';
             spark.style.top = y + 'px';
             spark.style.animationDelay = (Math.random() * 0.3) + 's';
-            spark.style.fontSize = (16 + Math.random() * 14) + 'px';
-            const angle = Math.random() * Math.PI * 2;
-            const dist = 20 + Math.random() * 30;
-            spark.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
-            spark.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+            spark.style.fontSize = (14 + Math.random() * 12) + 'px';
             photoArea.appendChild(spark);
             setTimeout(() => spark.remove(), 800);
         }
     }
 
+    // ====== MOBILE WAND FOLLOWER ======
+    photoArea.addEventListener('touchmove', function(e) {
+        if (e.touches.length === 1) {
+            const rect = photoArea.getBoundingClientRect();
+            wandFollower.style.display = 'block';
+            wandFollower.style.left = (e.touches[0].clientX - rect.left) + 'px';
+            wandFollower.style.top = (e.touches[0].clientY - rect.top) + 'px';
+        }
+    });
+    photoArea.addEventListener('touchend', function() {
+        setTimeout(() => { wandFollower.style.display = 'none'; }, 200);
+    });
+
+    // ====== SOUNDS ======
+    function playSound(type) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const now = ctx.currentTime;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            
+            if (type === 'shutter') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.1);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+            } else if (type === 'magic') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            } else if (type === 'pop') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+            }
+            
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.start(now); osc.stop(now + 0.25);
+        } catch(e) {}
+    }
+
     // ====== SPEECH RECOGNITION ======
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-        status.textContent = '⚠️ Speech recognition not supported. Try Chrome.';
-        btnRecord.disabled = true;
-    }
+    if (!SpeechRecognition) { status.textContent = '⚠️ Try Chrome for speech.'; btnRecord.disabled = true; }
 
     function toggleRecording() {
         if (!SpeechRecognition) { alert('Please use Chrome.'); return; }
         isRecording ? stopRecording() : startRecording();
     }
-
     function startRecording() {
-        recognition = new SpeechRecognition();
-        recognition.lang = 'en-US';
-        recognition.interimResults = false;
-        recognition.continuous = false;
-
+        recognition = new SpeechRecognition(); recognition.lang = 'en-US'; recognition.interimResults = false; recognition.continuous = false;
         recognition.onstart = function() {
-            isRecording = true;
-            btnRecord.textContent = '⏹ Stop';
-            btnRecord.classList.add('recording');
-            status.textContent = '🎤 Speaking...';
+            isRecording = true; btnRecord.textContent = '⏹ Stop'; btnRecord.classList.add('recording'); status.textContent = '🎤 Speaking...';
         };
-
         recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            description.value += (description.value ? ' ' : '') + transcript;
-            status.textContent = '✅ Added to text!';
+            description.value += (description.value ? ' ' : '') + event.results[0][0].transcript;
+            status.textContent = '✅ Added!';
         };
-
-        recognition.onerror = function(event) {
-            status.textContent = '❌ ' + event.error + '. Try again.';
-            stopRecording();
-        };
-
+        recognition.onerror = function(event) { status.textContent = '❌ ' + event.error; stopRecording(); };
         recognition.onend = function() { stopRecording(); };
-
-        // Beep
-        try {
-            const ctx = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = ctx.createOscillator(); const gain = ctx.createGain();
-            osc.type = 'sine'; osc.frequency.setValueAtTime(800, ctx.currentTime);
-            gain.gain.setValueAtTime(0.3, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-            osc.connect(gain); gain.connect(ctx.destination);
-            osc.start(); osc.stop(ctx.currentTime + 0.15);
-        } catch(e) {}
-
+        playSound('magic');
         setTimeout(() => recognition.start(), 200);
     }
-
     function stopRecording() {
-        isRecording = false;
-        btnRecord.textContent = '🎤 Speak';
-        btnRecord.classList.remove('recording');
+        isRecording = false; btnRecord.textContent = '🎤 Speak'; btnRecord.classList.remove('recording');
         if (recognition) { recognition.stop(); recognition = null; }
     }
-
-    // ====== SPEAK TEXT ======
     function speakText() {
-        const text = description.value.trim();
-        if (!text) return;
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'en-US'; u.rate = 0.85;
-        speechSynthesis.speak(u);
+        const text = description.value.trim(); if (!text) return;
+        const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; u.rate = 0.85; speechSynthesis.speak(u);
     }
-
-    // ====== CHECK ======
     function checkDescription() {
         const text = description.value.trim();
-        if (!text) {
-            feedback.textContent = '✏️ Write or say something first!';
-            feedback.className = 'feedback wrong'; return;
-        }
-        const hasThere = /there\s+(is|are)/i.test(text);
-        if (hasThere) {
-            feedback.textContent = '🌟 Great! You used there is / there are!';
-            feedback.className = 'feedback correct';
-        } else {
-            feedback.textContent = '💡 Try using "There is..." or "There are..."';
-            feedback.className = 'feedback wrong';
-        }
+        if (!text) { feedback.textContent = '✏️ Write or say something!'; feedback.className = 'feedback wrong'; return; }
+        feedback.textContent = /there\s+(is|are)/i.test(text) ? '🌟 Great! You used there is / there are!' : '💡 Try using "There is..." or "There are..."';
+        feedback.className = /there\s+(is|are)/i.test(text) ? 'feedback correct' : 'feedback wrong';
     }
-
-    // ====== SHARE ======
     function shareResult() {
         const text = description.value.trim();
-        if (!text) {
-            feedback.textContent = '✏️ Write or say something first!';
-            feedback.className = 'feedback wrong'; return;
-        }
+        if (!text) { feedback.textContent = '✏️ Write or say something!'; feedback.className = 'feedback wrong'; return; }
         const shareText = '📸 My Room: ' + text + '\n\nСделано в тренажёре! 🚀';
-        if (navigator.share) {
-            navigator.share({ text: shareText }).catch(() => {});
-        } else {
-            navigator.clipboard.writeText(shareText).then(() => {
-                feedback.textContent = '📋 Copied! Paste in a messenger.';
-                feedback.className = 'feedback correct';
-            }).catch(() => alert(shareText));
-        }
+        if (navigator.share) { navigator.share({ text: shareText }).catch(() => {}); }
+        else { navigator.clipboard.writeText(shareText).then(() => { feedback.textContent = '📋 Copied!'; feedback.className = 'feedback correct'; }).catch(() => alert(shareText)); }
     }
-
-    // ====== CLEAR ======
     function clearAll() {
-        photoImg.style.display = 'none';
-        photoPlaceholder.style.display = 'block';
-        photoImg.src = '';
-        document.getElementById('fileInput').value = '';
-        description.value = '';
-        feedback.textContent = '';
-        feedback.className = 'feedback';
-        status.textContent = '';
+        photoImg.style.display = 'none'; photoPlaceholder.style.display = 'block'; photoImg.src = '';
+        document.getElementById('fileInput').value = ''; description.value = '';
+        feedback.textContent = ''; feedback.className = 'feedback'; status.textContent = '';
         document.querySelectorAll('.sticker-on-photo').forEach(s => s.remove());
         document.querySelectorAll('.sparkle-burst').forEach(s => s.remove());
-        activeSticker = null;
-        document.querySelectorAll('.sticker-btn').forEach(b => b.classList.remove('active'));
+        activeSticker = null; document.querySelectorAll('.sticker-btn').forEach(b => b.classList.remove('active'));
     }
 </script>
 </body>
